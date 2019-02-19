@@ -13,6 +13,15 @@ public class InsertionSort extends SortAlgorithm {
     @Override
     public int[] sort(int[] array) {
         // TODO
-        return new int[0];
+        for (int i = 1; i<array.length;i++){
+            for (int j = i; j>0; j--){
+                if (array[j-1]>array[j]){
+                    int temp = array[j-1];
+                    array[j-1]=array[j];
+                    array[j]=temp;
+                }
+            }
+        }
+        return array;
     }
 }
