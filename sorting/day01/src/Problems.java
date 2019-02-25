@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Problems {
 
@@ -31,6 +28,7 @@ public class Problems {
             seen.add(j, A[i]);
             out[i] = getMedian(seen);
         }
+        System.out.println(Arrays.toString(out));
         return out;
     }
 
@@ -42,7 +40,39 @@ public class Problems {
      */
     public static double[] runningMedian(int[] inputStream) {
         double[] runningMedian = new double[inputStream.length];
+        PriorityQueue<Integer> maxPQ = maxPQ();
+        PriorityQueue<Integer> minPQ = minPQ();
         // TODO
+        if(inputStream.length==0){
+            return runningMedian;
+        }
+        runningMedian[0]=inputStream[0];
+        double med = runningMedian[0];
+        for(int i =0; i<inputStream.length;i++){
+            if(inputStream[i]<med){
+                maxPQ.offer(inputStream[i]);
+            }
+            if(inputStream[i]>=med){
+                minPQ.offer(inputStream[i]);
+            }
+
+            if((minPQ.size()-maxPQ.size()>1)){
+                int temp =minPQ.poll();
+                maxPQ.offer(temp);
+            }
+            if (maxPQ.size()>minPQ.size()){
+                int temp=maxPQ.poll();
+                minPQ.offer(temp);
+            }
+            if ((minPQ.size()-maxPQ.size()>0)){ ;
+                runningMedian[i]=minPQ.peek();
+            }
+            if (!minPQ.isEmpty() && !maxPQ.isEmpty() && maxPQ.size()==minPQ.size()){
+                runningMedian[i]=((double)minPQ.peek() + (double)maxPQ.peek())/2;
+            }
+            med=runningMedian[i];
+        }
+        System.out.println(Arrays.toString(runningMedian));
         return runningMedian;
     }
 

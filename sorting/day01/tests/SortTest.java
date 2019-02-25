@@ -45,6 +45,7 @@ public class SortTest {
         assertArrayEquals(sorter.sort(slowCase), sort(slowCase));
     }
 
+
     private int[] sort(int[] array) {
         int[] copy = Arrays.copyOf(array, array.length);
         Arrays.sort(copy);
@@ -64,6 +65,7 @@ public class SortTest {
 
         a = new int[] {8, 3, 4, 6, 7, 2, 1, 2};
         quickSort.quickSort(a, 1, a.length-2);
+        System.out.println(Arrays.toString(a));
         assertArrayEquals(a, new int[] {8, 1, 2, 3, 4, 6, 7, 2});
 
         // Quicksort the middle of a an array
