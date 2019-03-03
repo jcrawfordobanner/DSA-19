@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class PeakFinding {
 
     // Return -1 if left is higher, 1 if right is higher, 0 if peak
@@ -49,13 +51,61 @@ public class PeakFinding {
 
 
     public static int findOneDPeak(int[] nums) {
-        // TODO
+        int mid = nums.length/2;
+        if(peakOneD(0,nums)==0){
+            return 0;
+        }
+        if(peakOneD(nums.length-1,nums)==0){
+            return nums.length-1;
+        }
+        if(peakOneD(mid,nums)==-1){
+            findOneDPeak(nums);
+        }
+        if(peakOneD(mid,nums)==1){
+            findOneDPeak(nums);
+        }
+        if(peakOneD(mid,nums)==0){
+            return mid;
+        }
         return 0;
     }
 
     public static int[] findTwoDPeak(int[][] nums) {
         // TODO
-        return null;
+        int midX = nums.length/2;
+        int midY = nums[0].length/2;
+        int[] indices=new int[2];
+        if(peakX(midX,midY,nums)==0 && peakY(midX,midY,nums)==0){
+            indices[0] = midX;
+            indices[1] = midY;
+            return indices;
+        }
+        if(peakX(0,0,nums)==0 && peakY(0,0,nums)==0){
+            indices[0] = 0;
+            indices[1] = 0;
+            return indices;
+        }
+
+        if(peakX(nums.length-1,0,nums)==0 && peakY(nums.length-1,0,nums)==0){
+            indices[0] = 0;
+            indices[1] = nums.length-1;
+            return indices;
+        }
+        if(peakX(nums[0].length-1,nums.length-1,nums)==0 && peakY(nums[0].length-1,nums.length-1,nums)==0){
+            indices[0] = nums[0].length-1;
+            indices[1] = nums.length-1;
+            return indices;
+        }
+        if(midX==0 || midX==nums.length-1){
+            indices[0]=midX;
+            indices[1]=maxYIndex(midX,0,nums.length-1,nums);
+            return indices;
+        }
+        else{
+            indices[0]=midX;
+            indices[1]=findOneDPeak(nums[midX]);
+            return indices;
+        }
     }
 
 }

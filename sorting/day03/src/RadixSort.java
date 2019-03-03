@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class RadixSort {
@@ -23,28 +24,42 @@ public class RadixSort {
             L[i] = new LinkedList<>();
         for (int i : A) {
             // TODO: Extract the relevant digit from i, and add i to the corresponding Linked List.
+            int fope = getNthDigit(i, b, n);
+            L[fope].add(i);
         }
+        System.out.println(Arrays.toString(L));
         int j = 0; // index in A to place numbers
         for (LinkedList<Integer> list : L) {
-            // TODO: Put all numbers in the linked lists into A
+            // TODO: Put all numbers in the linked lists into
+            for (int pop : list) {
+                A[j] = pop;
+                if(j<A.length-1) {
+                    j++;
+                }
+            }
         }
     }
 
     /**
      * Runtime: TODO: Express your runtime in terms of n, b, and w
-     *
+     * <p>
      * n: length of array
      * w: word length of integers A in base b (equal to log base b of k (log_b k) )
      *
      * @param b The base to use for radix sort
      */
+
+
     static void radixSort(int[] A, int b) {
-        // Calculate the upper-bound for numbers in A
+        System.out.println("fucked "+ Arrays.toString(A));
         int k = A[0] + 1;
         for (int i = 1; i < A.length; i++)
             k = (A[i] + 1 > k) ? A[i] + 1 : k;
         int w = (int) Math.ceil(Math.log(k) / Math.log(b)); // w = log base b of k, word length of numbers
         // TODO: Perform radix sort
+        for (int j = 0; j < w; j++) {
+            countingSortByDigit(A, b, j);
+            System.out.println("sorted " + Arrays.toString(A));
+        }
     }
-
 }

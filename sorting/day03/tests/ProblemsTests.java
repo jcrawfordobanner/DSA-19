@@ -35,6 +35,7 @@ public class ProblemsTests {
             int[] A = generateRandomArrayOfSize(l, -100, 101);
             int[] sorted = sort(A);
             Problems.sortNumsBetween100s(A);
+            System.out.println(Arrays.toString(sorted));
             assertArrayEquals(A, sorted);
         }
     }
