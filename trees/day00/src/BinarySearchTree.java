@@ -1,3 +1,9 @@
+import com.sun.source.tree.Tree;
+
+//import javax.swing.tree.TreeNode;
+import java.util.ArrayList;
+//import java.util.Arrays;
+import java.util.Arrays;
 import java.util.List;
 
 public class BinarySearchTree<T extends Comparable<T>> {
@@ -27,9 +33,26 @@ public class BinarySearchTree<T extends Comparable<T>> {
             add(k);
     }
 
+    public List<T> Traversehelp(List<T> traved, TreeNode<T> currnode) {
+        // TODO
+        if(currnode==null){
+            return traved;
+        }
+        if(currnode.hasLeftChild()) {
+            Traversehelp(traved,currnode.leftChild);
+        }
+        traved.add(currnode.key);
+        if(currnode.hasRightChild()) {
+            Traversehelp(traved,currnode.rightChild);
+        }
+        return traved;
+    }
+
     public List<T> inOrderTraversal() {
         // TODO
-        return null;
+        List<T> trav = new ArrayList();
+        trav = Traversehelp(trav,root);
+        return trav;
     }
 
     /**
@@ -67,7 +90,9 @@ public class BinarySearchTree<T extends Comparable<T>> {
         else {
             // Case 3: two children
             // TODO
-            replacement = null;
+            replacement = findSuccessor(n);
+            delete(findSuccessor(n));
+            replacement.moveChildrenFrom(n);
         }
 
         // Put the replacement in its correct place, and set the parent.
@@ -103,12 +128,30 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     private TreeNode<T> findPredecessor(TreeNode<T> n) {
         // TODO
-        return null;
+        List<T> trav = inOrderTraversal();
+        int ind=trav.indexOf(n.key);
+        T pred =null;
+        if(ind>0) {
+           pred =trav.get(ind - 1);
+        }
+        if(ind==0){
+            return(null);
+        }
+        return(find(root,pred));
     }
 
     private TreeNode<T> findSuccessor(TreeNode<T> n) {
         // TODO
-        return null;
+        List<T> trav = inOrderTraversal();
+        int ind=trav.indexOf(n.key);
+        T pred =null;
+        if(ind<size-1) {
+            pred =trav.get(ind + 1);
+        }
+        if(ind==size-1){
+            return(null);
+        }
+        return(find(root,pred));
     }
 
     /**

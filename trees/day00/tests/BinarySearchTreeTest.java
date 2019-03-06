@@ -116,6 +116,7 @@ public class BinarySearchTreeTest {
         Integer[] expected = sorted(input);
         Object[] traversal = bst.inOrderTraversal().toArray();
         Integer[] received = Arrays.copyOf(traversal, traversal.length, Integer[].class);
+        System.out.println(Arrays.toString(expected));
         assertArrayEquals(expected, received);
     }
 
