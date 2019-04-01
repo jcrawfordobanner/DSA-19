@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class NQueens {
@@ -37,7 +38,6 @@ public class NQueens {
         return false;
     }
 
-
     /**
      * Creates a deep copy of the input array and returns it
      */
@@ -52,7 +52,45 @@ public class NQueens {
     public static List<char[][]> nQueensSolutions(int n) {
         // TODO
         List<char[][]> answers = new ArrayList<>();
+        char[][] board = new char[n][n];
+        for(int i =0; i<n;i++){
+            for(int j=0; j<n;j++){
+                board[i][j]='.';
+            }
+        }
+        HashMap<Integer,Boolean> rows = new HashMap<>();
+        HashMap<Integer,Boolean> cols = new HashMap<>();
+        answers=permHelp(board,n,answers,rows,cols);
         return answers;
+    }
+
+    public static List<char[][]> permHelp(char[][] board, int unused, List<char[][]> permutations, HashMap<Integer,Boolean>rows,HashMap<Integer,Boolean>cols){
+        if (unused == 0&&!permutations.contains(board)) {
+            permutations.add(copyOf(board));
+            return permutations;
+        }
+        int r =0;
+        while(rows.get(r)!=null && rows.get(r)){
+            r+=1;
+        }
+        for(int c=0; c<board[0].length;c++) {
+            if (cols.get(c)!=null && cols.get(c)) {
+                continue;
+            }
+            else if(!checkDiagonal(board,r,c)){
+                char[][] current = copyOf(board);
+                current[r][c]='Q';
+                unused-=1;
+                rows.put(r,true);
+                cols.put(c,true);
+                permHelp(current,unused,permutations,rows,cols);
+                rows.put(r,false);
+                cols.put(c,false);
+                unused+=1;
+                current[r][c]='.';
+            }
+        }
+        return permutations;
     }
 
 }
