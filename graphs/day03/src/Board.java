@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,15 +86,44 @@ public class Board {
      */
     public Iterable<Board> neighbors() {
         // TODO: Your code here
-        Iterator<Board> neighbors;
+        List<Board> neighbors=new ArrayList<>();
         int blanki=0;
-
+        int blankj=0;
         for(int i =0; i<n; i++){
             for (int j = 0;j<n;j++ ){
-                
+                if(tiles[i][j]==0){
+                    blanki=i;
+                    blankj=j;
+                    break;
+                }
             }
+            break;
         }
-        return null;
+        if(blanki+1<n){
+            int[][] temp = tiles.clone();
+            temp[blanki][blankj]=temp[blanki+1][blankj];
+            temp[blanki+1][blankj]=0;
+            neighbors.add(new Board(temp));
+        }
+        if(blanki-1>0){
+            int[][] temp = tiles.clone();
+            temp[blanki][blankj]=temp[blanki-1][blankj];
+            temp[blanki-1][blankj]=0;
+            neighbors.add(new Board(temp));
+        }
+        if(blankj-1<n){
+            int[][] temp = tiles.clone();
+            temp[blanki][blankj]=temp[blanki][blankj-1];
+            temp[blanki][blankj-1]=0;
+            neighbors.add(new Board(temp));
+        }
+        if(blankj+1<n){
+            int[][] temp = tiles.clone();
+            temp[blanki][blankj]=temp[blanki][blankj+1];
+            temp[blanki][blankj+1]=0;
+            neighbors.add(new Board(temp));
+        }
+        return neighbors;
     }
 
     /*
