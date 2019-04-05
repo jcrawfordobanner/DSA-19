@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,13 +12,15 @@ public class Board {
 
     //TODO
     // Create a 2D array representing the solved board state
-    private int[][] goal = {{}};
+    private int[][] goal = {{1,2,3},{4,5,6},{7,8,0}};
 
     /*
      * Set the global board size and tile state
      */
     public Board(int[][] b) {
         // TODO: Your code here
+        tiles =b;
+        n = tiles.length;
     }
 
     /*
@@ -26,7 +29,7 @@ public class Board {
      */
     private int size() {
         // TODO: Your code here
-        return 0;
+        return tiles.length;
     }
 
     /*
@@ -34,7 +37,16 @@ public class Board {
      */
     public int manhattan() {
         // TODO: Your code here
-        return 0;
+        int sum = 0;
+        for (int i =0; i<tiles.length;i++){
+            for(int j = 0; j<tiles[0].length;j++){
+                if (tiles[i][j]!=0){
+                    sum+=Math.abs(i-(tiles[i][j]-1)/n);
+                    sum+=Math.abs(j-(tiles[i][j]-1)%n);
+                }
+            }
+        }
+        return sum;
     }
 
     /*
@@ -42,6 +54,9 @@ public class Board {
      */
     public boolean isGoal() {
         // TODO: Your code here
+        if(tiles.equals(goal)){
+            return true;
+        }
         return false;
     }
 
@@ -51,6 +66,17 @@ public class Board {
      */
     public boolean solvable() {
         // TODO: Your code here
+        int sum = 0;
+        for (int i =0; i<tiles.length;i++){
+            for(int j = 0; j<tiles[0].length;j++){
+                if (tiles[i][j]<tiles[j][i]&&tiles[i][j]!=0&&tiles[j][i]!=0){
+                    sum+=1;
+                }
+            }
+        }
+        if(sum%2==0){
+            return true;
+        }
         return false;
     }
 
@@ -59,6 +85,14 @@ public class Board {
      */
     public Iterable<Board> neighbors() {
         // TODO: Your code here
+        Iterator<Board> neighbors;
+        int blanki=0;
+
+        for(int i =0; i<n; i++){
+            for (int j = 0;j<n;j++ ){
+                
+            }
+        }
         return null;
     }
 

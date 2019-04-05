@@ -134,4 +134,17 @@ public class PuzzleTest {
         assertEquals(solver.minMoves, 31);
     }
 
+    @Test
+    public  void solvtest()
+    {
+        int[][] puzzle = {{1, 8, 2},{0, 4, 3},{7, 6, 5}};
+        Board initial = new Board((puzzle));
+        if(initial.solvable()) {
+            System.out.println("Solvable");
+        }
+        else {
+            System.out.println("Not Solvable");
+        }
+    }
 }
+
