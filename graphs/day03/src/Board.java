@@ -68,13 +68,18 @@ public class Board {
     public boolean solvable() {
         // TODO: Your code here
         int sum = 0;
-        for (int i =0; i<tiles.length;i++){
-            for(int j = 0; j<tiles[0].length;j++){
-                if (tiles[i][j]<tiles[j][i]&&tiles[i][j]!=0&&tiles[j][i]!=0){
-                    sum+=1;
+        for (int i =0; i<n*n;i++){
+            int idealx = i/n;
+            int idealy = i%n;
+            for(int j = i+1; j<n*n;j++){
+                int jdealx = j/n;
+                int jdealy = j%n;
+                if (tiles[idealy][idealx]>tiles[jdealy][jdealx]) {
+                    sum++;
                 }
             }
         }
+        System.out.println(sum);
         if(sum%2==0){
             return true;
         }
@@ -84,9 +89,9 @@ public class Board {
     /*
      * Return all neighboring boards in the state tree
      */
-    public Iterable<Board> neighbors() {
+    public Iterable<Board> neighbors(){
         // TODO: Your code here
-        List<Board> neighbors=new ArrayList<>();
+        List<Board> neighbor=new ArrayList<>();
         int blanki=0;
         int blankj=0;
         for(int i =0; i<n; i++){
@@ -103,27 +108,27 @@ public class Board {
             int[][] temp = tiles.clone();
             temp[blanki][blankj]=temp[blanki+1][blankj];
             temp[blanki+1][blankj]=0;
-            neighbors.add(new Board(temp));
+            neighbor.add(new Board(temp));
         }
         if(blanki-1>0){
             int[][] temp = tiles.clone();
             temp[blanki][blankj]=temp[blanki-1][blankj];
             temp[blanki-1][blankj]=0;
-            neighbors.add(new Board(temp));
+            neighbor.add(new Board(temp));
         }
-        if(blankj-1<n){
+        if(blankj-1>0){
             int[][] temp = tiles.clone();
             temp[blanki][blankj]=temp[blanki][blankj-1];
             temp[blanki][blankj-1]=0;
-            neighbors.add(new Board(temp));
+            neighbor.add(new Board(temp));
         }
         if(blankj+1<n){
             int[][] temp = tiles.clone();
             temp[blanki][blankj]=temp[blanki][blankj+1];
             temp[blanki][blankj+1]=0;
-            neighbors.add(new Board(temp));
+            neighbor.add(new Board(temp));
         }
-        return neighbors;
+        return neighbor;
     }
 
     /*

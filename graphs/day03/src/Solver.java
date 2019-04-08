@@ -10,6 +10,8 @@ public class Solver {
     public int minMoves = -1;
     private State solutionState;
     private boolean solved = false;
+    private State init;
+    private List<State> visited = new LinkedList<>();
 
     /**
      * State class to make the cost calculations simple
@@ -23,11 +25,15 @@ public class Solver {
         private State prev;
 
         public State(Board board, int moves, State prev) {
+            compy comparator = new compy();
             this.board = board;
             this.moves = moves;
             this.prev = prev;
             // TODO
-            cost = 0;
+            cost = board.manhattan() + moves;
+            if (prev == null) {
+                init = this;
+            }
         }
 
         @Override
@@ -37,6 +43,13 @@ public class Solver {
             if (!(s instanceof State)) return false;
             return ((State) s).board.equals(this.board);
         }
+
+        private class compy implements Comparator<State> {
+            @Override
+            public int compare(State lop, State pop) {
+                return pop.cost - lop.cost;
+            }
+        }
     }
 
     /*
@@ -44,7 +57,7 @@ public class Solver {
      */
     private State root(State state) {
         // TODO: Your code here
-        return null;
+        return init;
     }
 
     /*
@@ -52,8 +65,25 @@ public class Solver {
      * Find a solution to the initial board using A* to generate the state tree
      * and a identify the shortest path to the the goal state
      */
+
     public Solver(Board initial) {
         // TODO: Your code here
+        solutionState = new State(initial,0,null);
+        State.compy vamoos = solutionState.new compy();
+        PriorityQueue<State> options = new PriorityQueue(vamoos);
+        if(isSolvable()) {
+            while (!solutionState.board.isGoal()) {
+                for (Board bitch : solutionState.board.neighbors()) {
+                    options.add(new State(bitch,solutionState.moves+1,solutionState));
+                }
+                visited.add(solutionState);
+                solutionState = options.poll();
+                minMoves+=1;
+            }
+        }
+        if(solutionState.board.isGoal()){
+            solved=true;
+        }
     }
 
     /*
@@ -62,6 +92,9 @@ public class Solver {
      */
     public boolean isSolvable() {
         // TODO: Your code here
+        if(solutionState.board.solvable()){
+            return true;
+        }
         return false;
     }
 
@@ -70,7 +103,11 @@ public class Solver {
      */
     public Iterable<Board> solution() {
         // TODO: Your code here
-        return null;
+        List<Board> steps = new LinkedList<>();
+        for (State s: visited){
+            steps.add(s.board);
+        }
+        return steps;
     }
 
     public State find(Iterable<State> iter, Board b) {
