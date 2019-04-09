@@ -25,12 +25,22 @@ public class Board {
     }
 
     /*
-     * Size of the board 
+     * Size of the board
      (equal to 3 for 8 puzzle, 4 for 15 puzzle, 5 for 24 puzzle, etc)
      */
     private int size() {
         // TODO: Your code here
         return tiles.length;
+    }
+
+    /*
+    Make a  D E E P  copy of a thicc 2D array
+     */
+    private static int[][] copyOf(int[][] A) {
+        int[][] B = new int[A.length][A[0].length];
+        for (int i = 0; i < A.length; i++)
+            System.arraycopy(A[i], 0, B[i], 0, A[0].length);
+        return B;
     }
 
     /*
@@ -55,7 +65,7 @@ public class Board {
      */
     public boolean isGoal() {
         // TODO: Your code here
-        if(tiles.equals(goal)){
+        if(equals(goal)){
             return true;
         }
         return false;
@@ -69,22 +79,25 @@ public class Board {
         // TODO: Your code here
         int sum = 0;
         for (int i =0; i<n*n;i++){
-            int idealx = i/n;
-            int idealy = i%n;
-            for(int j = i+1; j<n*n;j++){
-                int jdealx = j/n;
-                int jdealy = j%n;
-                if (tiles[idealy][idealx]>tiles[jdealy][jdealx]) {
-                    sum++;
+            int idealy = i/n;
+            int idealx = i%n;
+            if(tiles[idealy][idealx]!=0) {
+                for (int j = i + 1; j < n * n; j++) {
+                    int jdealy = j / n;
+                    int jdealx = j % n;
+                    if (tiles[idealy][idealx] < tiles[jdealy][jdealx] && tiles[jdealy][jdealx] != 0) {
+                        sum++;
+                    }
                 }
             }
         }
-        System.out.println(sum);
         if(sum%2==0){
             return true;
         }
         return false;
     }
+
+
 
     /*
      * Return all neighboring boards in the state tree
@@ -102,28 +115,27 @@ public class Board {
                     break;
                 }
             }
-            break;
         }
         if(blanki+1<n){
-            int[][] temp = tiles.clone();
+            int[][] temp = copyOf(tiles);
             temp[blanki][blankj]=temp[blanki+1][blankj];
             temp[blanki+1][blankj]=0;
             neighbor.add(new Board(temp));
         }
-        if(blanki-1>0){
-            int[][] temp = tiles.clone();
+        if(blanki-1>=0){
+            int[][] temp = copyOf(tiles);
             temp[blanki][blankj]=temp[blanki-1][blankj];
             temp[blanki-1][blankj]=0;
             neighbor.add(new Board(temp));
         }
-        if(blankj-1>0){
-            int[][] temp = tiles.clone();
+        if(blankj-1>=0){
+            int[][] temp = copyOf(tiles);
             temp[blanki][blankj]=temp[blanki][blankj-1];
             temp[blanki][blankj-1]=0;
             neighbor.add(new Board(temp));
         }
         if(blankj+1<n){
-            int[][] temp = tiles.clone();
+            int[][] temp = copyOf(tiles);
             temp[blanki][blankj]=temp[blanki][blankj+1];
             temp[blanki][blankj+1]=0;
             neighbor.add(new Board(temp));
