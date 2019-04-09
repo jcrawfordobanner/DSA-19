@@ -36,7 +36,7 @@ public class Board {
     /*
     Make a  D E E P  copy of a thicc 2D array
      */
-    private static int[][] copyOf(int[][] A) {
+    public static int[][] copyOf(int[][] A) {
         int[][] B = new int[A.length][A[0].length];
         for (int i = 0; i < A.length; i++)
             System.arraycopy(A[i], 0, B[i], 0, A[0].length);

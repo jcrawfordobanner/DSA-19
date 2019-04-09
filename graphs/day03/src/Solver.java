@@ -47,7 +47,7 @@ public class Solver {
         private class compy implements Comparator<State> {
             @Override
             public int compare(State lop, State pop) {
-                return pop.cost - lop.cost;
+                return lop.cost - pop.cost;
             }
         }
     }
@@ -75,6 +75,7 @@ public class Solver {
         HashMap<State,State> closed = new HashMap<>();
         if(isSolvable()) {
             while (solutionState.board.manhattan()!=0) {
+                System.out.println(options.size());
                 if(solutionState.board.isGoal()){
                     return;
                 }
@@ -106,6 +107,12 @@ public class Solver {
                     closed.put(solutionState,solutionState);
                 }
             }
+            State temp = new State(new Board(Board.copyOf(solutionState.board.tiles)),solutionState.moves,solutionState.prev);
+            while(temp!=null){
+                minMoves+=1;
+                temp=temp.prev;
+            }
+
         }
     }
 
