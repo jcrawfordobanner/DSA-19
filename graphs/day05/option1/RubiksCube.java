@@ -7,6 +7,7 @@ public class RubiksCube {
     // initialize a solved rubiks cube
     public RubiksCube() {
         // TODO
+        RubiksCube cubixnew RubiksCube();
     }
 
 

@@ -75,7 +75,6 @@ public class Solver {
         HashMap<State,State> closed = new HashMap<>();
         if(isSolvable()) {
             while (solutionState.board.manhattan()!=0) {
-                System.out.println(options.size());
                 if(solutionState.board.isGoal()){
                     return;
                 }
