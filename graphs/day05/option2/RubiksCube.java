@@ -74,8 +74,8 @@ public class RubiksCube {
                 huey++;
             }
         }
-        System.out.println(huey);
-        return huey;
+        System.out.println(huey/8);
+        return huey/8;
 
     }
 
@@ -245,12 +245,14 @@ public class RubiksCube {
         PriorityQueue<State> options = new PriorityQueue(balance);
         HashMap<State,State> open = new HashMap<>();
         HashMap<State,State> closed = new HashMap<>();
-        while (heur()!=0) {
-            System.out.println(heur());
+        options.add(sol);
+        while (!options.isEmpty()) {
+            System.out.println("asd");
+            options.remove(sol);
             if(sol.rubie.isSolved()){
-                return fuck;
+                break;
             }
-            for (RubiksCube bitch: neighbors()) {
+            for (RubiksCube bitch: sol.rubie.neighbors()) {
                 State killa = new State(bitch,sol.moves+1,sol);
                 if(open.containsKey(killa)){
                     if(open.get(killa).cost>sol.cost){
