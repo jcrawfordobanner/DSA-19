@@ -23,17 +23,17 @@ public class RubiksCube {
     }
 
     private class State{
-        int cost;
-        State prev;
-        char rot;
-        RubiksCube rubie;
-        int moves;
+        private int cost;
+        private State prev;
+        private char rot;
+        private RubiksCube rubie;
+        private int moves;
 
         public State(RubiksCube cobe,int moves, State pre) {
-            this.cost =cobe. heur() + moves;
+            this.cost =cobe.heur() + moves;
             this.prev=pre;
             this.rot= cobe.rot;
-            this.rubie=new RubiksCube(cobe);
+            this.rubie=cobe;
             this.moves = moves;
         }
 
@@ -64,25 +64,18 @@ public class RubiksCube {
     }
 
     public int heur(){
-        int huer=0;
-        for (int side = 0; side < 6; side++) {
-            for (int block = 0; block < 4; block++) {
-                int index = side*4+block;
-                for (int bit = 0; bit < 3; bit++) {
-                    if(side==getColor(index * 3 + bit)){
-                        return 0;
-                    }
-                    huer = Math.abs(side-getColor(index * 3 + bit));
-                    if(huer==3){
-                        huer+=2;
-                    }
-                    else{
-                        huer+=1;
-                    }
-                }
+        int huey=0;
+        for (int sad = 0; sad < 24; sad++) {
+            int collie = Math.abs(getColor(sad)-(sad/4));
+            if(collie==3){
+                huey+=2;
+            }
+            else if(collie!=0){
+                huey++;
             }
         }
-        return huer;
+        System.out.println(huey);
+        return huey;
 
     }
 
@@ -234,45 +227,42 @@ public class RubiksCube {
         return listTurns;
     }
 
-    public Iterable<RubiksCube> neighbors(RubiksCube init){
+    public Iterable<RubiksCube> neighbors(){
         char[] bleh = {'u','U','r','R','f','F'};
         ArrayList<RubiksCube> fucker = new ArrayList<>();
-        for(int i = 0; i<bleh.length;i++){
-            RubiksCube temp = new RubiksCube(init);
-            temp.rotate(bleh[i]);
-            fucker.add(temp);
+        for(int i = 0; i<bleh.length;i++){ ;
+            fucker.add(rotate(bleh[i]));
         }
         return fucker;
     }
     // return the list of rotations needed to solve a rubik's cube
     public List<Character> solve() {
         // TODO
+        scrambledCube(100);
         List <Character> fuck = new ArrayList<>();
-        State sol = new State(scrambledCube(10),0,null);
+        State sol = new State(this,0,null);
         State.comparator balance = sol.new comparator();
         PriorityQueue<State> options = new PriorityQueue(balance);
         HashMap<State,State> open = new HashMap<>();
         HashMap<State,State> closed = new HashMap<>();
-        while (!sol.rubie.isSolved()) {
+        while (heur()!=0) {
+            System.out.println(heur());
             if(sol.rubie.isSolved()){
                 return fuck;
             }
-            for (RubiksCube bitch: neighbors(sol.rubie)) {
-                RubiksCube bleh = new RubiksCube(bitch);
-                State killa = new State(bleh,sol.moves+1,sol);
+            for (RubiksCube bitch: neighbors()) {
+                State killa = new State(bitch,sol.moves+1,sol);
                 if(open.containsKey(killa)){
                     if(open.get(killa).cost>sol.cost){
                         closed.put(killa,open.get(killa));
                         open.put(killa,killa);
                         options.add(killa);
-                        continue;
                     }
                 }
                 else if(closed.containsKey(killa)){
                     if(closed.get(killa).cost>sol.cost){
                         open.put(killa,killa);
                         options.add(killa);
-                        continue;
                     }
                 }
                 else {
@@ -291,6 +281,7 @@ public class RubiksCube {
             fuck.add(temp.rot);
             temp=temp.prev;
         }
+        System.out.println(fuck);
         return fuck;
     }
 
