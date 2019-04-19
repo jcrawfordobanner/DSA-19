@@ -7,7 +7,6 @@ import java.util.concurrent.ThreadLocalRandom;
 // solve() function
 public class RubiksCube {
 
-    private char rot;
 
     private BitSet cube;
 
@@ -25,14 +24,12 @@ public class RubiksCube {
     private class State{
         private int cost;
         private State prev;
-        private char rot;
         private RubiksCube rubie;
         private int moves;
 
         public State(RubiksCube cobe,int moves, State pre) {
             this.cost =cobe.heur() + moves;
             this.prev=pre;
-            this.rot= cobe.rot;
             this.rubie=cobe;
             this.moves = moves;
         }
@@ -74,7 +71,6 @@ public class RubiksCube {
                 huey++;
             }
         }
-        System.out.println(huey/8);
         return huey/8;
 
     }
@@ -148,7 +144,6 @@ public class RubiksCube {
         int[] sidesFrom = null;
         int[] sidesTo = null;
         // colors move from the 'from' variable to the 'to' variable
-        rot = c;
         switch (c) {
             case 'u': // clockwise
             case 'U': // counterclockwise
@@ -228,63 +223,61 @@ public class RubiksCube {
     }
 
     public Iterable<RubiksCube> neighbors(){
-        char[] bleh = {'u','U','r','R','f','F'};
         ArrayList<RubiksCube> fucker = new ArrayList<>();
-        for(int i = 0; i<bleh.length;i++){ ;
-            fucker.add(rotate(bleh[i]));
-        }
+        fucker.add(new RubiksCube(rotate('u')));
+        fucker.add(new RubiksCube(rotate('U')));
+        fucker.add(new RubiksCube(rotate('r')));
+        fucker.add(new RubiksCube(rotate('R')));
+        fucker.add(new RubiksCube(rotate('f')));
+        fucker.add(new RubiksCube(rotate('F')));
         return fucker;
     }
     // return the list of rotations needed to solve a rubik's cube
     public List<Character> solve() {
         // TODO
-        scrambledCube(100);
         List <Character> fuck = new ArrayList<>();
         State sol = new State(this,0,null);
         State.comparator balance = sol.new comparator();
         PriorityQueue<State> options = new PriorityQueue(balance);
-        HashMap<State,State> open = new HashMap<>();
-        HashMap<State,State> closed = new HashMap<>();
+        HashSet<RubiksCube> visited = new HashSet<>();
         options.add(sol);
         while (!options.isEmpty()) {
-            System.out.println("asd");
             options.remove(sol);
             if(sol.rubie.isSolved()){
-                break;
+                fuck = makeMoveList(sol);
+                System.out.println(fuck);
+                return  fuck;
             }
             for (RubiksCube bitch: sol.rubie.neighbors()) {
                 State killa = new State(bitch,sol.moves+1,sol);
-                if(open.containsKey(killa)){
-                    if(open.get(killa).cost>sol.cost){
-                        closed.put(killa,open.get(killa));
-                        open.put(killa,killa);
-                        options.add(killa);
-                    }
-                }
-                else if(closed.containsKey(killa)){
-                    if(closed.get(killa).cost>sol.cost){
-                        open.put(killa,killa);
-                        options.add(killa);
-                    }
-                }
-                else {
-                    open.put(killa, killa);
+                if(!visited.contains(killa.rubie)){
+                    visited.add(killa.rubie);
                     options.add(killa);
                 }
             }
             if(options.size()>0) {
                 sol = options.poll();
-                open.remove(sol);
-                closed.put(sol,sol);
             }
         }
-        State temp = new State(new RubiksCube(sol.rubie),sol.moves,sol.prev);
-        while(temp!=null){
-            fuck.add(temp.rot);
-            temp=temp.prev;
-        }
-        System.out.println(fuck);
+        fuck = makeMoveList(sol);
         return fuck;
+    }
+
+    private List<Character> makeMoveList(State s) {
+        State current = s;
+        List<Character> ml = new ArrayList<>();
+        while(current.prev != null) {
+            RubiksCube last = current.prev.rubie;
+            RubiksCube now = current.rubie;
+            if(last.rotate('r').equals(now)) { ml.add(0,'r'); }
+            else if(last.rotate('u').equals(now)) { ml.add(0,'u'); }
+            else if(last.rotate('f').equals(now)) { ml.add(0,'f'); }
+            else if(last.rotate('R').equals(now)) { ml.add(0,'R'); }
+            else if(last.rotate('U').equals(now)) { ml.add(0,'U'); }
+            else if(last.rotate('F').equals(now)) { ml.add(0,'F'); }
+            current = current.prev;
+        }
+        return ml;
     }
 
 }
